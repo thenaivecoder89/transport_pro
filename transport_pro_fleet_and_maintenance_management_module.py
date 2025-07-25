@@ -1,8 +1,11 @@
 import os
 import pandas as pd
+import firebase_admin
+from firebase_admin import credentials, storage
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
+from uuid import uuid4
 load_dotenv()
 
 #Function to handle NULL/BLANK in Integer data types.
@@ -19,10 +22,38 @@ def get_date_value(value):
     else:
         return dt.strptime(value, '%Y-%m-%d')
 
+#Function to connect with firebase storage.
+class firebase_storage:
+    @staticmethod
+    def upload_image():
+        upload_path = input('Enter Local Path To Upload Image: ')
+        maintenance_stage = input('Enter maintenance stage (Pre/ Post): ')
+        if maintenance_stage == 'Pre':
+            firebase_file_path = f'Pre_Maintenance_Images/Pre_{uuid4()}.jpg'
+            blob = storage.bucket().blob(firebase_file_path)
+            blob.upload_from_filename(upload_path)
+            blob.make_public()
+            return blob.public_url
+        elif maintenance_stage == 'Post':
+            firebase_file_path = f'Post_Maintenance_Images/Post_{uuid4()}.jpg'
+            blob = storage.bucket().blob(firebase_file_path)
+            blob.upload_from_filename(upload_path)
+            blob.make_public()
+            return blob.public_url
+
+
 try:
     #Establish connection.
     RAILWAY_DB_URL = os.getenv("RAILWAY_DB_URL")
     engine = create_engine(RAILWAY_DB_URL, connect_args={'options': '-c search_path=transport_pro'})
+
+    #Initialize firebase.
+    FIREBASE_CREDENTIALS = os.getenv("FIREBASE_CREDENTIALS")
+    cred = credentials.Certificate(FIREBASE_CREDENTIALS)
+    firebase_admin.initialize_app(cred, {
+        'storageBucket': 'transportpro-b52e2.firebasestorage.app'
+    })
+    bucket = storage.bucket()
 
     #Query to create new records.
     new_record_type = input('Enter record type (Fleet/Maintenance): ')
@@ -115,7 +146,9 @@ try:
         new_maintenance_job_description = input('Maintenance Job Description: ')
         new_maintenance_workshop = input('Select Maintenance Workshop: ')
         new_maintenance_cost = get_integer_value(input('Maintenance Cost: '))
-        new_pre_maintenance_url = input('Upload Pre-Maintenance Image: ')
+        new_pre_maintenance_url = firebase_storage.upload_image()
+        new_post_maintenance_url = ''
+
 
         insert_new_maintenance = text("""
                                         insert into maintenance_master(
@@ -147,7 +180,8 @@ try:
             'maintenance_job_description': new_maintenance_job_description,
             'maintenance_workshop': new_maintenance_workshop,
             'maintenance_cost': new_maintenance_cost,
-            'pre_maintenance_image_url': new_pre_maintenance_url
+            'pre_maintenance_image_url': new_pre_maintenance_url,
+            'post_maintenance_image_url': new_post_maintenance_url
             })
     else:
         print('No valid option selected')
