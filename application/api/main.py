@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import json
 from application.database.Python_scripts.organization_db import get_organization_master_data as org_master
 import os
 
@@ -24,6 +25,6 @@ def test_railway():
 def get_organization_master_data():
     try:
         output_organization_master, output_organization_master_json = org_master()
-        return output_organization_master_json
+        return json.loads(output_organization_master_json)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
