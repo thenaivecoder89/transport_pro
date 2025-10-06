@@ -1,0 +1,37 @@
+create table organization_master(
+org_id_pk serial primary key,
+org_name varchar(1000)
+)
+
+alter table organization_master 
+add column created_by varchar(50),
+add column created_at timestamp default current_timestamp;
+
+alter table organization_master
+add column org_phone_primary varchar(50),
+add column org_phone_secondary varchar(50),
+add column org_email_primary varchar(50),
+add column org_email_secondary varchar(50);
+
+alter table organization_master
+drop column created_by,
+drop column created_at;
+
+select * from organization_master;
+
+insert into organization_master(
+org_name,
+org_address,
+org_phone_primary,
+org_phone_secondary,
+org_email_primary,
+created_by
+)
+values(
+'Urban Express',
+'Office no 105, First Floor, B Block, Bel Rasheed Twin Towers, Al Qusais, Dubai, UAE',
+'+971 52 1124 424',
+'+971 52 1134 434',
+'info@urbanexpress.ae',
+'System'
+);
