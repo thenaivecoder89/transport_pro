@@ -1,0 +1,47 @@
+create table role_master(
+role_id_pk serial primary key,
+role_name varchar(500),
+role_description varchar(1000),
+hr_system_access_flag varchar(5),
+procurement_system_access_flag varchar(5),
+contracts_system_access_flag varchar(5),
+fleet_management_system_access_flag varchar(5),
+maintenance_system_access_flag varchar(5),
+inventory_system_access_flag varchar(5),
+finance_system_access_flag varchar(5)
+);
+
+insert into role_master(
+role_name,
+role_description,
+hr_system_access_flag,
+procurement_system_access_flag,
+contracts_system_access_flag,
+fleet_management_system_access_flag,
+maintenance_system_access_flag,
+inventory_system_access_flag,
+finance_system_access_flag
+)values(
+'SYSTEM',
+'This is a full system access role that is to be used only for one-time bulk data migration.',
+'Y',
+'Y',
+'Y',
+'Y',
+'Y',
+'Y',
+'Y'
+),
+(
+'HR_ADMIN',
+'This is a full HR system access role that is to be used by HR administrator for setup and configuration.',
+'Y',
+'N',
+'N',
+'N',
+'N',
+'N',
+'N'
+);
+
+select * from role_master;

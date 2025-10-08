@@ -18,7 +18,7 @@ def get_organization_master_data():
         return df_organization_master, df_organization_master.to_json(orient='records')
     except Exception as e:
         error_message = {'Error Encountered': {e}}
-        return error_message
+        return None, error_message
 
 # Create new organization
 def create_organization(payload: dict):
@@ -46,6 +46,8 @@ def create_organization(payload: dict):
         """)
         with engine.begin() as conn:
             conn.execute(insert_into_organization_master, payload)
+            success_message = {'Successfully created organization: ': {payload.get('org_name')}}
+            return success_message
     except Exception as e:
         error_message = {'Error Encountered': {e}}
         return error_message
@@ -85,6 +87,8 @@ def update_organization(payload: dict):
             }
             with engine.begin() as conn:
                 conn.execute(update_organization_master, params_update)
+                success_message = {'Successfully updated organization: ': {payload.get('org_name')}}
+                return success_message
         else:
             return {'Organization ID not found.'}
     except Exception as e:
@@ -108,6 +112,8 @@ def delete_organization(payload: dict):
             }
             with engine.begin() as conn:
                 conn.execute(delete_organization_master, params_delete)
+                success_message = {'Successfully deleted organization ID: ': {payload.get('org_id')}}
+                return success_message
         else:
             return {'Organization ID not found'}
     except Exception as e:

@@ -1,0 +1,105 @@
+create table employee_deployment_transaction(
+empl_depl_id serial primary key,
+empl_depl_empl_id_fk int not null,
+empl_deployment_type varchar(50),
+empl_deployment_client_name varchar(1000),
+empl_deployment_from_date date,
+empl_deployment_to_date date,
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_depl_empl_master
+foreign key (empl_depl_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_leave_transaction(
+empl_leave_id serial primary key,
+empl_leave_empl_id_fk int not null,
+empl_leave_type varchar(50),
+empl_leave_from_date date,
+empl_leave_to_date date,
+empl_leave_balance double precision,
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_leave_empl_master
+foreign key (empl_leave_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_overtime_transaction(
+empl_overtime_id serial primary key,
+empl_overtime_empl_id_fk int not null,
+empl_overtime_reason varchar(100),
+empl_overtime_date date,
+empl_overtime_hrs double precision,
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_overtime_empl_master
+foreign key (empl_overtime_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_complaints_transaction(
+empl_complaints_id serial primary key,
+empl_complaints_empl_id_fk int not null,
+empl_complaintant varchar(100),
+empl_complaint_date date,
+empl_complaint_nature varchar(100),
+empl_complaint_action varchar(100),
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_complaints_empl_master
+foreign key (empl_complaints_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_fines_penalties_transaction(
+empl_fp_id serial primary key,
+empl_fp_empl_id_fk int not null,
+empl_fine_date date,
+empl_fine_nature varchar(100),
+empl_fine_amount double precision,
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_fp_empl_master
+foreign key (empl_fp_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_warning_transaction(
+empl_warn_id serial primary key,
+empl_warn_empl_id_fk int not null,
+empl_warning_letter_date date,
+empl_warning_nature varchar(100),
+empl_warning_amount double precision,
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_warn_empl_master
+foreign key (empl_warn_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_advance_payment_transaction(
+empl_adv_id serial primary key,
+empl_adv_empl_id_fk int not null,
+empl_advance_payment_date date,
+empl_advance_payment_nature varchar(100),
+empl_advance_payment_amount double precision,
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_adv_empl_master
+foreign key (empl_adv_empl_id_fk)
+references employee_master (empl_id_pk)
+);
+
+create table employee_training_transaction(
+empl_trg_id serial primary key,
+empl_trg_empl_id_fk int not null,
+empl_training_date date,
+empl_training_topics varchar(10000),
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_empl_trg_empl_master
+foreign key (empl_trg_empl_id_fk)
+references employee_master (empl_id_pk)
+);
