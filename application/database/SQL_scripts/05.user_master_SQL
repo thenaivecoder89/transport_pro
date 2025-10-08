@@ -1,0 +1,38 @@
+-- Enable extention for UUID
+create extension if not exists "pgcrypto";
+
+create table user_master(
+user_id_pk serial primary key,
+user_role_id_fk int not null,
+user_org_id_fk int not null,
+user_uuid UUID default gen_random_uuid() unique,
+username varchar(50) unique not null,
+password_hash text not null,
+user_active_inactive_flag varchar(5),
+created_by varchar(100),
+created_at timestamp default current_timestamp,
+constraint fk_role_user
+foreign key (user_role_id_fk)
+references role_master (role_id_pk),
+constraint fk_org_user
+foreign key (user_org_id_fk)
+references organization_master (org_id_pk)
+);
+
+insert into user_master(
+user_role_id_fk,
+user_org_id_fk,
+username,
+password_hash,
+user_active_inactive_flag,
+created_by
+)values(
+1,
+1,
+'sys_owner',
+'$2b$12$tDmnawaMGLctmNozhjvnueSE4EpUrvXHJsbf0a3HG.D5ndmLR5U.O', -- System_transportpro@1234
+'A',
+'SYSTEM'
+);
+
+select * from user_master;

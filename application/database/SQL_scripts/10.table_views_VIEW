@@ -1,0 +1,24 @@
+create or replace view user_role_view as
+select
+um.user_id_pk,
+um.user_uuid,
+um.username,
+um.user_active_inactive_flag,
+rm.role_name,
+rm.role_description,
+rm.hr_system_access_flag,
+rm.procurement_system_access_flag,
+rm.contracts_system_access_flag,
+rm.fleet_management_system_access_flag,
+rm.maintenance_system_access_flag,
+rm.inventory_system_access_flag,
+rm.finance_system_access_flag,
+um.created_by,
+um.created_at
+from
+user_master um,
+role_master rm
+where
+um.user_role_id_fk = rm.role_id_pk;
+
+select * from user_role_view;
