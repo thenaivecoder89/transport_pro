@@ -37,6 +37,6 @@ def get_organization_master_data():
 def login_access(payload: dict):
     try:
         output = log_acc(payload)
-        return json.loads(output)
+        return output
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
