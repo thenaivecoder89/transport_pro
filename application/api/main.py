@@ -1,34 +1,9 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from application.database.Python_scripts.organization_db import get_organization_master_data as org_master
+from application.api.api_logger import DBAccessLogMiddleware
 import os
-import logging
-from starlette.middleware.base import BaseHTTPMiddleware
-
-# Configure logging
-logging.basicConfig(
-    filename="api_access.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
-
-class IPLoggerMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        # Get the client IP, respecting proxies/load balancers if any
-        x_forwarded_for = request.headers.get("x-forwarded-for")
-        client_ip = (
-            x_forwarded_for.split(",")[0].strip()
-            if x_forwarded_for
-            else request.client.host
-        )
-
-        # Optional: log path, method, and IP
-        logging.info(f"{request.method} {request.url.path} accessed from IP: {client_ip}")
-
-        # Proceed to actual route
-        response = await call_next(request)
-        return response
 
 # Setup app
 app = FastAPI(title='Transport Pro APIs')
@@ -42,7 +17,7 @@ app.add_middleware(
     allow_headers=['*'],
     allow_credentials=False
 )
-app.add_middleware(IPLoggerMiddleware) # IPLogger to log all IP addresses that access the application.
+app.add_middleware(DBAccessLogMiddleware) # IPLogger to log all IP addresses that access the application.
 
 @app.get('/', status_code=200)
 def test_railway():
