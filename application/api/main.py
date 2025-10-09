@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from application.database.Python_scripts.organization_db import get_organization_master_data as org_master
+from application.database.Python_scripts.rbac_db import login_and_access as log_acc
 from application.api.api_logger import DBAccessLogMiddleware
 import os
 
@@ -29,5 +30,13 @@ def get_organization_master_data():
     try:
         output_organization_master, output_organization_master_json = org_master()
         return json.loads(output_organization_master_json)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post('/login_access', status_code=200)
+def login_access(payload: dict):
+    try:
+        output = log_acc(payload)
+        return json.loads(output)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
