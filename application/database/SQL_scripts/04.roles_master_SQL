@@ -45,3 +45,31 @@ finance_system_access_flag
 );
 
 select * from role_master;
+
+alter table role_master
+add full_system_access_flag varchar(5),
+add created_by varchar(100),
+add created_at timestamp default current_timestamp;
+
+select * from role_master;
+
+insert into role_master(
+role_name,
+role_description,
+hr_system_access_flag,
+procurement_system_access_flag,
+contracts_system_access_flag,
+fleet_management_system_access_flag,
+maintenance_system_access_flag,
+inventory_system_access_flag,
+finance_system_access_flag,
+full_system_access_flag,
+created_by
+)
+values
+('PROCUREMENT_ADMIN', 'This is a full Procurement system access role that is to be used by Procurement administrator for setup and configuration.', 'N', 'Y', 'N', 'N', 'N', 'N', 'N', 'N', 'SYSTEM'),
+('CONTRACTS_ADMIN', 'This is a full Contracts system access role that is to be used by Contracts administrator for setup and configuration.', 'N', 'N', 'Y', 'N', 'N', 'N', 'N', 'N', 'SYSTEM'),
+('FLEET_ADMIN', 'This is a full Fleet system access role that is to be used by Fleet administrator for setup and configuration.', 'N', 'N', 'N', 'Y', 'N', 'N', 'N', 'N', 'SYSTEM'),
+('MAINTENANCE_ADMIN', 'This is a full Maintenance system access role that is to be used by Maintenance administrator for setup and configuration.', 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 'N', 'SYSTEM'),
+('INVENTORY_ADMIN', 'This is a full Inventory system access role that is to be used by Inventory administrator for setup and configuration.', 'N', 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 'SYSTEM'),
+('FINANCE_ADMIN', 'This is a full Finance system access role that is to be used by Finance administrator for setup and configuration.', 'N', 'N', 'N', 'N', 'N', 'N', 'Y', 'N', 'SYSTEM');
