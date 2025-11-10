@@ -49,7 +49,7 @@ def login_access(payload: dict):
 @app.get('/get_all_user_details', status_code=200)
 def get_all_user_details():
     try:
-        all_user_detail_json = usr_roles()
+        all_user_detail, all_user_detail_json = usr_roles()
         return json.loads(all_user_detail_json)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
